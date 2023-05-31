@@ -29,3 +29,5 @@ Contributions are welcome. Please feel free to fork the project, make changes, a
 ## License
 
 This project is open-source. Released under the MIT license. Please see the license file for more information.
+
+Please note that some of the code in this project(GalaxyBrainedMathsLOL.cs) is based on Acord.Math library which is released under the GNU Lesser General Public License v2.1 license.
