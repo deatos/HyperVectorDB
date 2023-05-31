@@ -31,3 +31,7 @@ Contributions are welcome. Please feel free to fork the project, make changes, a
 This project is open-source. Released under the MIT license. Please see the license file for more information.
 
 Please note that some of the code in this project(GalaxyBrainedMathsLOL.cs) is based on Acord.Math library which is released under the GNU Lesser General Public License v2.1 license.
+
+## About this project and its author and why it came to be
+
+It started out with me getting back into artificial intellegence and wanting to do so using c#.  I was unable to find anything that would suite me needs for a vector database.  Then John Dagdelen put together this vector store in python,  it was faily basic at the time posted without that many lines of code so I decided to try and use gpt to port it to c#.  This was somewhat successfull but it did not quite work as needed so this project was born.
