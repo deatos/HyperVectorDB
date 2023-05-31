@@ -34,4 +34,4 @@ Please note that some of the code in this project(GalaxyBrainedMathsLOL.cs) is b
 
 ## About this project and its author and why it came to be
 
-It started out with me getting back into artificial intellegence and wanting to do so using c#.  I was unable to find anything that would suite me needs for a vector database.  Then John Dagdelen put together this vector store in python,  it was faily basic at the time posted without that many lines of code so I decided to try and use gpt to port it to c#.  This was somewhat successfull but it did not quite work as needed so this project was born.
+It started out with me getting back into artificial intellegence and wanting to do so using c#.  I was unable to find anything that would suite my needs for a vector database.  Then John Dagdelen put together this vector store in python,  it was faily basic at the time posted without that many lines of code so I decided to try and use gpt to port it to c#.  This was somewhat successful but it did not quite work as needed so this project was born.
