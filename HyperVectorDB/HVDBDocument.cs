@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 namespace HyperVectorDB {
     public class HVDBDocument {
         public string ID { get; set; }
-        public string Name { get; set; }
         public string DocumentString { get; set; }
-
-        public HVDBDocument(string name, string documentstring) {
+        public HVDBDocument() {
             ID = Guid.NewGuid().ToString();
-            Name = name;
+            DocumentString = string.Empty;
+        }
+        public HVDBDocument(string documentstring) {
+            ID = Guid.NewGuid().ToString();
             DocumentString = documentstring;
         }
-        public HVDBDocument(string id, string name, string documentstring) {
+        public HVDBDocument(string id, string documentstring) {
             ID = id;
-            Name = name;
             DocumentString = documentstring;
         }
 

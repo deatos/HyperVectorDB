@@ -15,8 +15,14 @@ namespace HyperVectorDB.Embedder {
         public Double[] GetVector(String Document) {
             var result = this.Client.EmbeddingsEndpoint.CreateEmbeddingAsync(Document, OpenAI.Models.Model.Embedding_Ada_002).GetAwaiter().GetResult();
             TotalTokens += result.Usage.TotalTokens;
-            var res = result.Data[0].Embedding.ToArray<double>();
-            return res;
+            var vect = result.Data[0].Embedding.ToArray<double>();
+            return vect;
+        }
+        public Double[][] GetVectors(String[] Documents) {
+            var result = this.Client.EmbeddingsEndpoint.CreateEmbeddingAsync(Documents, OpenAI.Models.Model.Embedding_Ada_002).GetAwaiter().GetResult();
+            TotalTokens += result.Usage.TotalTokens;
+            var vmatrix = result.Data.Select(x => x.Embedding.ToArray<double>()).ToArray();
+            return vmatrix;
         }
     }
 }
