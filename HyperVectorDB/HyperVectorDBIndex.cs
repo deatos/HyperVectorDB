@@ -1,20 +1,55 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
+
 
 namespace HyperVectorDB {
-    public class HyperVectorDB {
-        //TODO: Add routine to clear cache so we can have multiple caches without the code becoming bad
-        private readonly List<double[]> vectors;
-        private readonly List<HVDBDocument> documents;
+    public class HyperVectorDBIndex {
+        public readonly string Name;
+        private List<double[]> vectors;
+        private List<HVDBDocument> documents;
         private readonly Dictionary<double[], HVDBQueryResult> queryCacheCosineSimilarity;
 
-        public HyperVectorDB() {
+        public HyperVectorDBIndex(string name) {
             this.vectors = new List<double[]>();
             this.documents = new List<HVDBDocument>();
             this.queryCacheCosineSimilarity = new Dictionary<double[], HVDBQueryResult>();
+            Name = name;
         }
+        public void Save(string path) {
+            //TODO: This could be done better
+            var savepath = Path.Combine(path, Name);
+            if (!Directory.Exists(savepath)) {
+                Directory.CreateDirectory(savepath);
+            }
+            var js = new JsonSerializer();
+            using (var sw = new StreamWriter(Path.Combine(savepath, "vectors.json"),false)) {
+                using var jw = new JsonTextWriter(sw);
+                js.Serialize(jw, vectors);
+            }
+            using (var sw = new StreamWriter(Path.Combine(savepath, "documents.json"),false)) {
+                using var jw = new JsonTextWriter(sw);
+                js.Serialize(jw, documents);
+            }
 
+        }
+        public void Load(string path) {
+            //TODO: This could be done better
+            var loadpath = Path.Combine(path, Name);
+            if (!Directory.Exists(loadpath)) {
+                throw new DirectoryNotFoundException($"Directory {loadpath} not found.");
+            }
+            var js = new JsonSerializer();
+            using (var sr = new StreamReader(Path.Combine(loadpath, "vectors.json"))) {
+                using var jr = new JsonTextReader(sr);
+                vectors = js.Deserialize<List<double[]>>(jr);
+            }
+            using (var sr = new StreamReader(Path.Combine(loadpath, "documents.json"))) {
+                using var jr = new JsonTextReader(sr);
+                documents = js.Deserialize<List<HVDBDocument>>(jr);
+            }
+        }
         public void Add(double[] vector, HVDBDocument doc) {
             if (vector == null) {
                 throw new ArgumentNullException(nameof(vector));
