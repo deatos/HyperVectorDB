@@ -1,6 +1,7 @@
 # HyperVectorDB
 
 HyperVectorDB is a local vector database built in C# that supports various distance/similarity measures. It is designed to store vectors and associated documents and perform high-performance vector queries. This project supports Cosine Similarity, Jaccard Dissimilarity, as well as Euclidean, Manhattan, Chebyshev, and Canberra distances.
+If you are looking for a python library to do the same thing check out John Dagdelen https://github.com/jdagdelen/hyperDB
 
 ## Features(To be updated)
 
@@ -31,7 +32,8 @@ Contributions are welcome. Please feel free to fork the project, make changes, a
 This project is open-source. Released under the MIT license. Please see the license file for more information.
 
 Please note that some of the code in this project(GalaxyBrainedMathsLOL.cs) is based on Acord.Math library which is released under the GNU Lesser General Public License v2.1 license.
+TFIDF is from Kory Becker's project located at https://github.com/primaryobjects/TFIDF
 
 ## About this project and its author and why it came to be
 
-It started out with me getting back into artificial intellegence and wanting to do so using c#.  I was unable to find anything that would suite my needs for a vector database.  Then John Dagdelen put together this vector store in python,  it was faily basic at the time posted without that many lines of code so I decided to try and use gpt to port it to c#.  This was somewhat successful but it did not quite work as needed so this project was born.
+It started out with me getting back into artificial intellegence and wanting to do so using c#.  I was unable to find anything that would suite my needs for a vector database.  Then John Dagdelen put together this vector store in python https://github.com/jdagdelen/hyperDB,  it was faily basic at the time posted without that many lines of code so I decided to try and use gpt to port it to c#.  This was somewhat successful but it did not quite work as needed so this project was born.
