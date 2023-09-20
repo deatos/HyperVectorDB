@@ -1,5 +1,3 @@
-# This project has been rewritten from the ground up at https://github.com/deatos/HyperVectorDB <--- Please use this instead.
-
 # HyperVectorDB
 
 HyperVectorDB is a local vector database built in C# that supports various distance/similarity measures. It is designed to store vectors and associated documents and perform high-performance vector queries. This project supports Cosine Similarity, Jaccard Dissimilarity, as well as Euclidean, Manhattan, Chebyshev, and Canberra distances.
