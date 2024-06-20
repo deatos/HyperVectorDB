@@ -29,6 +29,17 @@ namespace HyperVectorDBExample {
                 DB.IndexDocument("TestIndex", "This is a test document about cats and fish and birds and dogs");
                 DB.IndexDocument("TestIndex", "This is a test document about fish and birds and dogs and cats");
                 DB.IndexDocument("TestIndex", "This is a test document about birds and dogs and cats and fish");
+                
+                string[] files = Directory.GetFiles(@"./TestDocuments", "*.*", SearchOption.AllDirectories);
+                Console.WriteLine($"Indexing {files.Length} files.");
+                foreach(string file in files)
+                {
+                    Console.WriteLine(file);
+                    DB.IndexDocumentFile("TestIndex", file);
+                }
+
+                
+                
                 DB.Save();
             }
             while(true) {
@@ -38,7 +49,7 @@ namespace HyperVectorDBExample {
                 if (searchterm is null) break;
                 if (searchterm is "") continue;
                 var sw = new Stopwatch();sw.Start();
-                var result = DB.QueryCosineSimilarity(searchterm);
+                var result = DB.QueryCosineSimilarity(searchterm, 10);
                 sw.Stop();
                 Console.WriteLine("Results:");
                 for (var i = 0; i < result.Documents.Count; i++) Console.WriteLine(result.Documents[i].DocumentString + " " + result.Distances[i]);
