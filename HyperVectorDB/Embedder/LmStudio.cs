@@ -45,32 +45,29 @@ namespace HyperVectorDB.Embedder
         public Double[][] GetVectors(String[] Documents)
         {
             throw new NotImplementedException();
-            double[][] vmatrix = new double[1][];
-            vmatrix[0] = new double[1];
-            return vmatrix;
         }
     }
 
 
     class EmbeddingRequest
     {
-        public string input { get; set; }
-        public string model { get; set; }
+        required public string input { get; set; }
+        required public string model { get; set; }
     }
-    // EmbeddingResponse response = JsonConvert.DeserializeObject<EmbeddingResponse>(myJsonResponse);
+
     class Datum
     {
-        public string @object { get; set; }
-        public List<double> embedding { get; set; }
-        public int index { get; set; }
+        required public string @object { get; set; }
+        required public List<double> embedding { get; set; }
+        required public int index { get; set; }
     }
 
     class EmbeddingResponse
     {
-        public string @object { get; set; }
-        public List<Datum> data { get; set; }
-        public string model { get; set; }
-        public Usage usage { get; set; }
+        required public string @object { get; set; }
+        required public List<Datum> data { get; set; }
+        required public string model { get; set; }
+        required public Usage usage { get; set; }
     }
 
     class Usage
