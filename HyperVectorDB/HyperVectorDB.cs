@@ -4,6 +4,7 @@ using System.Data.SqlTypes;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HyperVectorDB.Embedder;
 
@@ -48,6 +49,48 @@ namespace HyperVectorDB {
             index.Add(vector, doc);
             return true;
         }
+
+        public bool IndexDocumentFile(string indexName, string documentPath)
+        {
+            if (!Indexs.ContainsKey(indexName)) return false;
+            if (!System.IO.File.Exists(documentPath)) return false;
+            var index = Indexs[indexName];
+
+            bool isMarkdown = documentPath.ToUpperInvariant().EndsWith(".MD");
+            bool skippingBlock = false;
+
+            string[] lines = System.IO.File.ReadAllLines(documentPath);
+            for(int i = 0; i < lines.Length; i++)
+            {
+                if(string.IsNullOrWhiteSpace(lines[i])){continue;}
+
+                if(isMarkdown)
+                {
+                    if(lines[i].Trim().StartsWith("---"))// Skip YAML frontmatter
+                    {
+                        skippingBlock = !skippingBlock;
+                        continue;
+                    }
+
+                    if(lines[i].Contains("```"))// Skip code blocks
+                    {
+                        skippingBlock = !skippingBlock;
+                        continue;
+                    }
+
+                    if(skippingBlock){continue;}
+                    
+                }
+                
+                Console.WriteLine(lines[i].Trim());
+                var vector = _embedder.GetVector(lines[i].Trim());
+                var doc = new HVDBDocument($"{documentPath}:{i}");
+                index.Add(vector, doc);
+            }
+
+            return true;
+        }
+
         public void Save() {
             if (!Directory.Exists(DatabasePath)) Directory.CreateDirectory(DatabasePath);
             var indexfile = System.IO.Path.Combine(DatabasePath, "indexs.txt");
