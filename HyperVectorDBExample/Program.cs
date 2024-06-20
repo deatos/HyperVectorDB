@@ -30,7 +30,7 @@ namespace HyperVectorDBExample {
                 DB.IndexDocument("TestIndex", "This is a test document about fish and birds and dogs and cats");
                 DB.IndexDocument("TestIndex", "This is a test document about birds and dogs and cats and fish");
                 
-                string[] files = Directory.GetFiles(@"./TestDocuments", "*.*", SearchOption.AllDirectories);
+                string[] files = Directory.GetFiles(@".\TestDocuments", "*.*", SearchOption.AllDirectories);
                 Console.WriteLine($"Indexing {files.Length} files.");
                 foreach(string file in files)
                 {
