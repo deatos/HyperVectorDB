@@ -131,7 +131,7 @@ namespace HyperVectorDB {
             {
                 //double similarity = 1 - Distance.Cosine(queryVector, vectors[i]);
 
-                double similarity = 1 - GalaxyBrainedMathsLOL.CosineSimilarity(queryVector, vectors[i]);
+                double similarity = 1 - Math.CosineSimilarity(queryVector, vectors[i]);
                 similarities.Add(new KeyValuePair<HVDBDocument, double>(documents[i], similarity));
             });
             var orderedData = similarities
@@ -153,7 +153,7 @@ namespace HyperVectorDB {
             var similarities = new ConcurrentBag<KeyValuePair<HVDBDocument, double>>();
             Parallel.For(0, vectors.Count, i =>
             {
-                double similarity = 1 - GalaxyBrainedMathsLOL.JaccardDissimilarity(queryVector, vectors[i]);
+                double similarity = 1 - Math.JaccardDissimilarity(queryVector, vectors[i]);
                 similarities.Add(new KeyValuePair<HVDBDocument, double>(documents[i], similarity));
             });
             var orderedData = similarities
@@ -174,7 +174,7 @@ namespace HyperVectorDB {
             var similarities = new ConcurrentBag<KeyValuePair<HVDBDocument, double>>();
             Parallel.For(0, vectors.Count, i =>
             {
-                double similarity = 1 - GalaxyBrainedMathsLOL.EuclideanDistance(queryVector, vectors[i]);
+                double similarity = 1 - Math.EuclideanDistance(queryVector, vectors[i]);
                 similarities.Add(new KeyValuePair<HVDBDocument, double>(documents[i], similarity));
             });
             var orderedData = similarities
@@ -195,7 +195,7 @@ namespace HyperVectorDB {
             var similarities = new ConcurrentBag<KeyValuePair<HVDBDocument, double>>();
             Parallel.For(0, vectors.Count, i =>
             {
-                double similarity = 1 - GalaxyBrainedMathsLOL.ManhattanDistance(queryVector, vectors[i]);
+                double similarity = 1 - Math.ManhattanDistance(queryVector, vectors[i]);
                 similarities.Add(new KeyValuePair<HVDBDocument, double>(documents[i], similarity));
             });
             var orderedData = similarities
@@ -217,7 +217,7 @@ namespace HyperVectorDB {
             var similarities = new ConcurrentBag<KeyValuePair<HVDBDocument, double>>();
             Parallel.For(0, vectors.Count, i =>
             {
-                double similarity = 1 - GalaxyBrainedMathsLOL.ChebyshevDistance(queryVector, vectors[i]);
+                double similarity = 1 - Math.ChebyshevDistance(queryVector, vectors[i]);
                 similarities.Add(new KeyValuePair<HVDBDocument, double>(documents[i], similarity));
             });
             var orderedData = similarities
@@ -238,7 +238,7 @@ namespace HyperVectorDB {
             var similarities = new ConcurrentBag<KeyValuePair<HVDBDocument, double>>();
             Parallel.For(0, vectors.Count, i =>
             {
-                double similarity = 1 - GalaxyBrainedMathsLOL.CanberraDistance(queryVector, vectors[i]);
+                double similarity = 1 - Math.CanberraDistance(queryVector, vectors[i]);
                 similarities.Add(new KeyValuePair<HVDBDocument, double>(documents[i], similarity));
             });
             var orderedData = similarities

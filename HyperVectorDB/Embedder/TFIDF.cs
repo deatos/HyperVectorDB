@@ -59,7 +59,7 @@ namespace HyperVectorDB.Embedder {
                 // Calculate the IDF for each vocabulary term.
                 foreach (var term in vocabulary) {
                     double numberOfDocsContainingTerm = stemmedDocs.Where(d => d.Contains(term)).Count();
-                    _vocabularyIDF[term] = Math.Log((double)stemmedDocs.Count / ((double)1 + numberOfDocsContainingTerm));
+                    _vocabularyIDF[term] = System.Math.Log((double)stemmedDocs.Count / ((double)1 + numberOfDocsContainingTerm));
                 }
             }
 
@@ -124,7 +124,7 @@ namespace HyperVectorDB.Embedder {
                 sumSquared += value * value;
             }
 
-            double SqrtSumSquared = Math.Sqrt(sumSquared);
+            double SqrtSumSquared = System.Math.Sqrt(sumSquared);
 
             foreach (var value in vector) {
                 // L2-norm: Xi = Xi / Sqrt(X0^2 + X1^2 + .. + Xn^2)
