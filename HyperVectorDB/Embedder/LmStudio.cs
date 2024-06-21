@@ -12,21 +12,20 @@ namespace HyperVectorDB.Embedder
 {
     public class LmStudio : IEmbedder
     {
-        public LmStudio()
-        {
+        public string URL { get; set; } = @"http://localhost:1234/v1/embeddings";
+        public string Model { get; set; } = @"CompendiumLabs/bge-large-en-v1.5-gguf";
 
-        }
-        public Double[] GetVector(String Document)
+        public double[] GetVector(string Document)
         {
             EmbeddingRequest er = new()
             {
                 input = Document,
-                model = "CompendiumLabs/bge-large-en-v1.5-gguf"
+                model = Model
             };
 
 
             HttpClient client = new HttpClient();
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "http://localhost:1234/v1/embeddings");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, URL);
             request.Content = new StringContent(JsonSerializer.Serialize(er));
             request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
@@ -42,9 +41,15 @@ namespace HyperVectorDB.Embedder
             double[] vect = response.data.First().embedding.ToArray();
             return vect;
         }
-        public Double[][] GetVectors(String[] Documents)
+
+        public double[][] GetVectors(string[] Documents)
         {
-            throw new NotImplementedException();
+            List<double[]> vectors = new();
+            foreach (string document in Documents)
+            {
+                vectors.Add(GetVector(document));
+            }
+            return vectors.ToArray();
         }
     }
 
