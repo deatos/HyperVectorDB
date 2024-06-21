@@ -49,10 +49,8 @@ namespace HyperVectorDB
             }
 
             vectors = JsonSerializer.Deserialize<List<double[]>>(System.IO.File.ReadAllText(Path.Combine(loadpath, "vectors.json")))!;
-            Console.WriteLine($"Loaded {vectors.Count} vectors");
 
             documents = JsonSerializer.Deserialize<List<HVDBDocument>>(System.IO.File.ReadAllText(Path.Combine(loadpath, "documents.json")))!;
-            Console.WriteLine($"Loaded {documents.Count} document records");
 
         }
         public void Add(double[] vector, HVDBDocument doc)
