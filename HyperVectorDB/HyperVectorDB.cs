@@ -120,6 +120,7 @@ namespace HyperVectorDB
                 index.Load(DatabasePath);
                 Indexs.Add(index.Name, index);
             }
+            sr.Close();
         }
 
         public HVDBQueryResult QueryCosineSimilarity(string query, int topK = 5)
