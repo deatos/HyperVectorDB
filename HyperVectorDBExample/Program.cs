@@ -67,6 +67,9 @@ namespace HyperVectorDBExample
                 DB.IndexDocument("TestIndex", "This is a test document about cats and fish and birds and dogs");
                 DB.IndexDocument("TestIndex", "This is a test document about fish and birds and dogs and cats");
                 DB.IndexDocument("TestIndex", "This is a test document about birds and dogs and cats and fish");
+                DB.Save();
+                DB = new HyperVectorDB.HyperVectorDB(new HyperVectorDB.Embedder.LmStudio(), "TestDatabase");
+                DB.Load();
                 
                 string[] files = Directory.GetFiles(@".\TestDocuments", "*.*", SearchOption.AllDirectories);
                 Console.WriteLine($"Indexing {files.Length} files.");
@@ -74,6 +77,7 @@ namespace HyperVectorDBExample
                 {
                     Console.WriteLine(file);
                     DB.IndexDocumentFile("TestIndex", file, CustomPreprocessor);
+                    DB.Save();
                 }
 
 
