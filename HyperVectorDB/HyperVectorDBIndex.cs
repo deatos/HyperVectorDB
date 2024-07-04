@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using MessagePack;
 
 
 namespace HyperVectorDB
@@ -16,6 +17,12 @@ namespace HyperVectorDB
         private List<HVDBDocument> documents;
         private readonly Dictionary<double[], HVDBQueryResult> queryCacheCosineSimilarity;
 
+        private bool fileValid = false;
+
+        private MessagePackSerializerOptions options = MessagePackSerializerOptions.Standard
+            .WithSecurity(MessagePackSecurity.UntrustedData)
+            .WithCompression(MessagePackCompression.Lz4BlockArray);
+
         public HyperVectorDBIndex(string name)
         {
             this.vectors = new List<double[]>();
@@ -23,35 +30,43 @@ namespace HyperVectorDB
             this.queryCacheCosineSimilarity = new Dictionary<double[], HVDBQueryResult>();
             Name = name;
         }
-        public void Save(string path)
+        public async void Save(string path)
         {
-            //TODO: This could be done better
+            if (fileValid) { return; }
             var savepath = Path.Combine(path, Name);
             if (!Directory.Exists(savepath))
             {
                 Directory.CreateDirectory(savepath);
             }
 
-            string vectorsJson = JsonSerializer.Serialize(vectors);
-            System.IO.File.WriteAllText(Path.Combine(savepath, "vectors.json"), vectorsJson);
+            byte[] vectorsBytes = MessagePackSerializer.Serialize(vectors);
+            var vectorsToken = System.IO.File.WriteAllBytesAsync(Path.Combine(savepath, "vectors.bin"), vectorsBytes);
 
-            string documentsJson = JsonSerializer.Serialize(documents);
-            System.IO.File.WriteAllText(Path.Combine(savepath, "documents.json"), documentsJson);
+            byte[] documentsBytes = MessagePackSerializer.Serialize(documents);
+            var documentsToken = System.IO.File.WriteAllBytesAsync(Path.Combine(savepath, "documents.bin"), documentsBytes);
+            await vectorsToken;
+            await documentsToken;
 
+            fileValid = true;
         }
-        public void Load(string path)
+        public async void Load(string path)
         {
-            //TODO: This could be done better
             var loadpath = Path.Combine(path, Name);
             if (!Directory.Exists(loadpath))
             {
                 throw new DirectoryNotFoundException($"Directory {loadpath} not found.");
             }
 
-            vectors = JsonSerializer.Deserialize<List<double[]>>(System.IO.File.ReadAllText(Path.Combine(loadpath, "vectors.json")))!;
+            var vectorsToken = System.IO.File.ReadAllBytesAsync(Path.Combine(loadpath, "vectors.bin"));
+            var documentsToken = System.IO.File.ReadAllBytesAsync(Path.Combine(loadpath, "documents.bin"));
 
-            documents = JsonSerializer.Deserialize<List<HVDBDocument>>(System.IO.File.ReadAllText(Path.Combine(loadpath, "documents.json")))!;
+            await vectorsToken;
+            vectors = MessagePackSerializer.Deserialize<List<double[]>>(vectorsToken.Result, options);
 
+            await documentsToken;
+            documents = MessagePackSerializer.Deserialize<List<HVDBDocument>>(documentsToken.Result, options);
+
+            fileValid = true;
         }
         public void Add(double[] vector, HVDBDocument doc)
         {
@@ -120,6 +135,7 @@ namespace HyperVectorDB
         public void ResetCaches()
         {
             queryCacheCosineSimilarity.Clear();
+            fileValid = false;
         }
         private HVDBQueryResult? TryHitCacheCosineSimilarity(double[] queryVector, int topK = 5)
         {

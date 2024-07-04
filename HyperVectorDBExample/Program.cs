@@ -18,11 +18,10 @@ namespace HyperVectorDBExample
             {
                 if (line.Contains("---"))// Skip YAML frontmatter
                 {
-                    skippingBlock = !skippingBlock;
+                    skippingBlock = false;
                     return null;
                 }
-
-                if (line.Contains("```"))// Skip code blocks
+                else if (line.Contains("```"))// Skip code blocks
                 {
                     skippingBlock = !skippingBlock;
                     return null;
@@ -41,7 +40,7 @@ namespace HyperVectorDBExample
 
         static void Main()
         {
-            DB = new HyperVectorDB.HyperVectorDB(new HyperVectorDB.Embedder.LmStudio(), "TestDatabase");
+            DB = new HyperVectorDB.HyperVectorDB(new HyperVectorDB.Embedder.LmStudio(), "TestDatabase", 32);
             if (Directory.Exists("TestDatabase"))
             {
                 Console.WriteLine("Loading database");
@@ -51,24 +50,25 @@ namespace HyperVectorDBExample
             {
                 Console.WriteLine("Creating database");
                 DB.CreateIndex("TestIndex");
-                DB.IndexDocument("TestIndex", "This is a test document about dogs");
-                DB.IndexDocument("TestIndex", "This is a test document about cats");
-                DB.IndexDocument("TestIndex", "This is a test document about fish");
-                DB.IndexDocument("TestIndex", "This is a test document about birds");
-                DB.IndexDocument("TestIndex", "This is a test document about dogs and cats");
-                DB.IndexDocument("TestIndex", "This is a test document about cats and fish");
-                DB.IndexDocument("TestIndex", "This is a test document about fish and birds");
-                DB.IndexDocument("TestIndex", "This is a test document about birds and dogs");
-                DB.IndexDocument("TestIndex", "This is a test document about dogs and cats and fish");
-                DB.IndexDocument("TestIndex", "This is a test document about cats and fish and birds");
-                DB.IndexDocument("TestIndex", "This is a test document about fish and birds and dogs");
-                DB.IndexDocument("TestIndex", "This is a test document about birds and dogs and cats");
-                DB.IndexDocument("TestIndex", "This is a test document about dogs and cats and fish and birds");
-                DB.IndexDocument("TestIndex", "This is a test document about cats and fish and birds and dogs");
-                DB.IndexDocument("TestIndex", "This is a test document about fish and birds and dogs and cats");
-                DB.IndexDocument("TestIndex", "This is a test document about birds and dogs and cats and fish");
+
+                DB.IndexDocument("This is a test document about dogs");
+                DB.IndexDocument("This is a test document about cats");
+                DB.IndexDocument("This is a test document about fish");
+                DB.IndexDocument("This is a test document about birds");
+                DB.IndexDocument("This is a test document about dogs and cats");
+                DB.IndexDocument("This is a test document about cats and fish");
+                DB.IndexDocument("This is a test document about fish and birds");
+                DB.IndexDocument("This is a test document about birds and dogs");
+                DB.IndexDocument("This is a test document about dogs and cats and fish");
+                DB.IndexDocument("This is a test document about cats and fish and birds");
+                DB.IndexDocument("This is a test document about fish and birds and dogs");
+                DB.IndexDocument("This is a test document about birds and dogs and cats");
+                DB.IndexDocument("This is a test document about dogs and cats and fish and birds");
+                DB.IndexDocument("This is a test document about cats and fish and birds and dogs");
+                DB.IndexDocument("This is a test document about fish and birds and dogs and cats");
+                DB.IndexDocument("This is a test document about birds and dogs and cats and fish");
                 DB.Save();
-                DB = new HyperVectorDB.HyperVectorDB(new HyperVectorDB.Embedder.LmStudio(), "TestDatabase");
+                DB = new HyperVectorDB.HyperVectorDB(new HyperVectorDB.Embedder.LmStudio(), "TestDatabase", 32);
                 DB.Load();
                 
                 string[] files = Directory.GetFiles(@".\TestDocuments", "*.*", SearchOption.AllDirectories);
@@ -76,13 +76,15 @@ namespace HyperVectorDBExample
                 foreach (string file in files)
                 {
                     Console.WriteLine(file);
-                    DB.IndexDocumentFile("TestIndex", file, CustomPreprocessor);
+                    DB.IndexDocumentFile(file, CustomPreprocessor);
                     DB.Save();
+                    DB.Load();
                 }
 
 
 
                 DB.Save();
+                DB.Load();
             }
             while (true)
             {
