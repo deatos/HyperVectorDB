@@ -364,3 +364,7 @@ FodyWeavers.xsd
 /TestDatabase
 HyperVectorDB/Centivus.EnglishStemmer.dll
 /coverage_report
+/_site
+/docs/_site
+docs/api/.manifest
+/docs/api
