@@ -43,7 +43,7 @@ namespace HyperVectorDB
         /// <summary>
         /// Collection of `HyperVectorDBIndex` organized by names
         /// </summary>
-        public readonly Dictionary<string, HyperVectorDBIndex> Indexes;
+        private readonly Dictionary<string, HyperVectorDBIndex> Indexes;
 
         private readonly IEmbedder _embedder;
 
