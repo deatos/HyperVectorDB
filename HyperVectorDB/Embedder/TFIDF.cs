@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using EnglishStemmer;
@@ -57,7 +59,7 @@ namespace HyperVectorDB.Embedder {
                 // Calculate the IDF for each vocabulary term.
                 foreach (var term in vocabulary) {
                     double numberOfDocsContainingTerm = stemmedDocs.Where(d => d.Contains(term)).Count();
-                    _vocabularyIDF[term] = Math.Log((double)stemmedDocs.Count / ((double)1 + numberOfDocsContainingTerm));
+                    _vocabularyIDF[term] = System.Math.Log((double)stemmedDocs.Count / ((double)1 + numberOfDocsContainingTerm));
                 }
             }
 
@@ -122,7 +124,7 @@ namespace HyperVectorDB.Embedder {
                 sumSquared += value * value;
             }
 
-            double SqrtSumSquared = Math.Sqrt(sumSquared);
+            double SqrtSumSquared = System.Math.Sqrt(sumSquared);
 
             foreach (var value in vector) {
                 // L2-norm: Xi = Xi / Sqrt(X0^2 + X1^2 + .. + Xn^2)
@@ -136,23 +138,28 @@ namespace HyperVectorDB.Embedder {
         /// Saves the TFIDF vocabulary to disk.
         /// </summary>
         /// <param name="filePath">File path</param>
-        public static void Save(string filePath = "vocabulary.dat") {
+        public static void Save(string filePath = "vocabulary.json") {
             // Save result to disk.
-            using (FileStream fs = new FileStream(filePath, FileMode.Create)) {
-                BinaryFormatter formatter = new BinaryFormatter();
-                formatter.Serialize(fs, _vocabularyIDF);
-            }
+            string json = JsonSerializer.Serialize(_vocabularyIDF);
+            System.IO.File.WriteAllText(filePath, json);
         }
 
         /// <summary>
         /// Loads the TFIDF vocabulary from disk.
         /// </summary>
         /// <param name="filePath">File path</param>
-        public static void Load(string filePath = "vocabulary.dat") {
+        public static void Load(string filePath = "vocabulary.json") {
             // Load from disk.
-            using (FileStream fs = new FileStream(filePath, FileMode.Open)) {
-                BinaryFormatter formatter = new BinaryFormatter();
-                _vocabularyIDF = (Dictionary<string, double>)formatter.Deserialize(fs);
+            Dictionary<string, double>? vocabulary = 
+                JsonSerializer.Deserialize<Dictionary<string, double>>(System.IO.File.ReadAllText(filePath));
+
+            if(vocabulary != null)
+            {
+                _vocabularyIDF = vocabulary;
+            }
+            else
+            {
+                throw new Exception();
             }
         }
 
