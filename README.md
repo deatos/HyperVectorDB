@@ -14,6 +14,8 @@ If you are looking for a python library to do the same thing check out John Dagd
   - **Manhattan Distance**: This function performs a Manhattan Distance query on the database.
   - **Chebyshev Distance**: This function performs a Chebyshev Distance query on the database.
   - **Canberra Distance**: This function performs a Canberra Distance query on the database.
+- **Automatic Parallelization**: When configured, the database will automatically split across multiple files and memory regions to take full advantage of async IO on store and multithreading on query.
+- **Data Compression**: When saved to disk, the database uses LZ4 compression
 
 Each query function returns the top `k` documents and their corresponding similarity or distance values. The value of `k` is configurable and defaults to 5.
 
@@ -31,7 +33,7 @@ Contributions are welcome. Please feel free to fork the project, make changes, a
 
 This project is open-source. Released under the MIT license. Please see the license file for more information.
 
-Please note that some of the code in this project(GalaxyBrainedMathsLOL.cs) is based on Acord.Math library which is released under the GNU Lesser General Public License v2.1 license.
+Please note that some of the code in this project(Math.cs) is based on Acord.Math library which is released under the GNU Lesser General Public License v2.1 license.
 TFIDF is from Kory Becker's project located at https://github.com/primaryobjects/TFIDF
 
 ## About this project and its author and why it came to be
