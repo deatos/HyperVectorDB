@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{8249
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HyperVectorDBExample", "HyperVectorDBExample\HyperVectorDBExample.csproj", "{D07BC829-91A2-49E4-8775-0E6E303F3789}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HyperVectorDB.Tests", "HyperVectorDB.Tests\HyperVectorDB.Tests.csproj", "{F2548C65-3051-4D37-9AA1-55A5ED3B4D27}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{D07BC829-91A2-49E4-8775-0E6E303F3789}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D07BC829-91A2-49E4-8775-0E6E303F3789}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D07BC829-91A2-49E4-8775-0E6E303F3789}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2548C65-3051-4D37-9AA1-55A5ED3B4D27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2548C65-3051-4D37-9AA1-55A5ED3B4D27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2548C65-3051-4D37-9AA1-55A5ED3B4D27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2548C65-3051-4D37-9AA1-55A5ED3B4D27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

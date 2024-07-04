@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /TestDatabase
 HyperVectorDB/Centivus.EnglishStemmer.dll
+/coverage_report
