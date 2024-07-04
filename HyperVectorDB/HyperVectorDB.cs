@@ -17,7 +17,9 @@ namespace HyperVectorDB
 
         public readonly string DatabasePath;
 
-        public delegate string? DocumentPreprocessor(string line, string? path = null);
+        public delegate string? DocumentPreprocessor(string line, string? path = null, int? lineNumber = null);
+
+        public delegate string? DocumentPostprocessor(string line, string? path = null, int? lineNumber = null);
 
         public readonly Dictionary<string, HyperVectorDBIndex> Indexes;
 
@@ -67,20 +69,19 @@ namespace HyperVectorDB
             return true;
         }
 
-        public bool IndexDocument(string indexName, string document, DocumentPreprocessor? preprocessor = null)
+        public bool IndexDocument(string indexName, string document, DocumentPreprocessor? preprocessor = null, DocumentPostprocessor? postprocessor = null)
         {
             //Passthrough overload to avoid breaking changes to API
-            return IndexDocument(document, preprocessor, indexName);
+            return IndexDocument(document, preprocessor, postprocessor, indexName);
         }
 
-        public bool IndexDocument(string document, DocumentPreprocessor? preprocessor = null, string? indexName = null)
+        public bool IndexDocument(string document, DocumentPreprocessor? preprocessor = null, DocumentPostprocessor? postprocessor = null, string? indexName = null)
         {
             string IndexName;
             if (indexName != null)
             {
                 if (!Indexes.ContainsKey(indexName)) return false;
                 IndexName = indexName;
-                Console.WriteLine($"USING INDEX {IndexName}");
             }
             else if (indexName == null && AutoIndexCount == 0)
             {
@@ -91,7 +92,6 @@ namespace HyperVectorDB
                 ulong hash = StringHash(document);
                 ulong bucket = hash % AutoIndexCount;
                 IndexName = $"AutoIndex_{bucket}";
-                Console.WriteLine($"HASH: {hash} \nUSING BUCKET {IndexName}");
             }
             var index = Indexes[IndexName];
 
@@ -103,23 +103,34 @@ namespace HyperVectorDB
                 if (line == null) { return false; }
             }
 
-            
-            var vector = _embedder.GetVector(document);
-            var doc = new HVDBDocument(document);
-            index.Add(vector, doc);
-            return true;
+
+
+            if (postprocessor != null)
+            {
+                string? postDoc = postprocessor(document);
+                if (postDoc == null) { return false; }
+                var doc = new HVDBDocument(postDoc);
+                var vector = _embedder.GetVector(line);
+                index.Add(vector, doc);
+                return true;
+            }
+            else
+            {
+                var doc = new HVDBDocument(line);
+                var vector = _embedder.GetVector(line);
+                index.Add(vector, doc);
+                return true;
+            }
         }
 
-        public bool IndexDocumentFile(string indexName, string documentPath, DocumentPreprocessor? preprocessor = null)
+        public bool IndexDocumentFile(string indexName, string documentPath, DocumentPreprocessor? preprocessor = null, DocumentPostprocessor? postprocessor = null)
         {
-            return IndexDocumentFile(documentPath, preprocessor, indexName);
+            return IndexDocumentFile(documentPath, preprocessor, postprocessor, indexName);
         }
 
-        public bool IndexDocumentFile(string documentPath, DocumentPreprocessor? preprocessor = null, string? indexName = null)
+        public bool IndexDocumentFile(string documentPath, DocumentPreprocessor? preprocessor = null, DocumentPostprocessor? postprocessor = null, string? indexName = null)
         {
             if (!System.IO.File.Exists(documentPath)) return false;
-
-
 
             string[] lines = System.IO.File.ReadAllLines(documentPath);
             for (int i = 0; i < lines.Length; i++)
@@ -129,7 +140,7 @@ namespace HyperVectorDB
                 {
                     if (!Indexes.ContainsKey(indexName)) return false;
                     IndexName = indexName;
-                    
+
                 }
                 else if (indexName == null && AutoIndexCount == 0)
                 {
@@ -140,23 +151,32 @@ namespace HyperVectorDB
                     ulong hash = StringHash(lines[i]);
                     ulong bucket = hash % AutoIndexCount;
                     IndexName = $"AutoIndex_{bucket}";
-                    //Console.WriteLine($"HASH: {hash}");
                 }
-                
+
                 var index = Indexes[IndexName];
 
                 string? line = lines[i];
 
                 if (preprocessor != null)
                 {
-                    line = preprocessor(lines[i], documentPath);
+                    line = preprocessor(lines[i], documentPath, i);
                     if (line == null) { continue; }
                 }
 
-                Console.WriteLine($"USING INDEX {IndexName}\t{line}");
-                var vector = _embedder.GetVector(line);
-                var doc = new HVDBDocument($"{documentPath}|{i}");
-                index.Add(vector, doc);
+                if (postprocessor != null)
+                {
+                    string? postDoc = postprocessor(lines[i], documentPath, i);
+                    if (postDoc == null) { return false; }
+                    var doc = new HVDBDocument(postDoc);
+                    var vector = _embedder.GetVector(line);
+                    index.Add(vector, doc);
+                }
+                else
+                {
+                    var doc = new HVDBDocument(line);
+                    var vector = _embedder.GetVector(line);
+                    index.Add(vector, doc);
+                }
             }
 
             return true;
@@ -173,6 +193,13 @@ namespace HyperVectorDB
                 index.Value.Save(DatabasePath);
             }
             sw.Close();
+
+            Console.WriteLine("Index Usage:");
+            foreach(string key in Indexes.Keys)
+            {
+                Console.Write($"{Indexes[key].Count,4}");
+            }
+            Console.WriteLine();
         }
 
         public void Load()
@@ -185,7 +212,7 @@ namespace HyperVectorDB
                 if (line is null) continue;
                 var index = new HyperVectorDBIndex(line);
                 index.Load(DatabasePath);
-                if(!Indexes.ContainsKey(index.Name))
+                if (!Indexes.ContainsKey(index.Name))
                 {
                     Indexes.Add(index.Name, index);
                 }

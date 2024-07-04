@@ -10,7 +10,7 @@ namespace HyperVectorDBExample
 
         // Example of a custom preprocessor delegate, used here to filter Markdown
         static bool skippingBlock = false;
-        private static string? CustomPreprocessor(string line, string? path)
+        private static string? CustomPreprocessor(string line, string? path, int? lineNumber)
         {
             if (string.IsNullOrWhiteSpace(line)) { return null; }
 
@@ -26,6 +26,14 @@ namespace HyperVectorDBExample
                     skippingBlock = !skippingBlock;
                     return null;
                 }
+                else
+                {
+                    if (line.EndsWith("aliases: ") ||
+                        line.Contains("date created:") ||
+                        line.Contains("date modified:") ||
+                        (line.EndsWith(":") && !line.StartsWith("#"))
+                    ) { return null; }
+                }
 
                 if (line.Contains("%%")) { return null; }//Skip annotation lines
 
@@ -36,6 +44,13 @@ namespace HyperVectorDBExample
             }
 
             return line.Trim();
+        }
+
+        private static string? CustomPostprocessor(string line, string? path, int? lineNumber)
+        {
+            if (path == null) { return line; }
+
+            return $"{path!}|{lineNumber}";
         }
 
         static void Main()
@@ -73,12 +88,13 @@ namespace HyperVectorDBExample
                 
                 string[] files = Directory.GetFiles(@".\TestDocuments", "*.*", SearchOption.AllDirectories);
                 Console.WriteLine($"Indexing {files.Length} files.");
+                int i = 0;
                 foreach (string file in files)
                 {
                     Console.WriteLine(file);
-                    DB.IndexDocumentFile(file, CustomPreprocessor);
-                    DB.Save();
-                    DB.Load();
+                    DB.IndexDocumentFile(file, CustomPreprocessor, CustomPostprocessor);
+                    i++;
+                    if (i % 10 == 0) { DB.Save(); }
                 }
 
 

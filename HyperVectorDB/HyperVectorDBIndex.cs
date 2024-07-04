@@ -13,6 +13,11 @@ namespace HyperVectorDB
     public class HyperVectorDBIndex
     {
         public readonly string Name;
+
+        public int Count
+        {
+            get { return documents.Count; }
+        }
         private List<double[]> vectors;
         private List<HVDBDocument> documents;
         private readonly Dictionary<double[], HVDBQueryResult> queryCacheCosineSimilarity;
