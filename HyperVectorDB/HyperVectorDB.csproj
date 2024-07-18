@@ -20,10 +20,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="Centivus.EnglishStemmer">
-      <HintPath>.\Centivus.EnglishStemmer.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>
