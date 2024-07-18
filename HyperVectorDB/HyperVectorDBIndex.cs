@@ -10,10 +10,19 @@ using MessagePack;
 
 namespace HyperVectorDB
 {
-    public class HyperVectorDBIndex
+    /// <summary>
+    /// An internal index of the `HyperVectorDB`
+    /// </summary>
+    class HyperVectorDBIndex
     {
+        /// <summary>
+        /// Name of the index. The name serves only as an identifier and must be unique within the `HyperVectorDB`.
+        /// </summary>
         public readonly string Name;
 
+        /// <summary>
+        /// Number of `HVDBDocument` records in this index
+        /// </summary>
         public int Count
         {
             get { return documents.Count; }
@@ -28,6 +37,10 @@ namespace HyperVectorDB
             .WithSecurity(MessagePackSecurity.UntrustedData)
             .WithCompression(MessagePackCompression.Lz4BlockArray);
 
+        /// <summary>
+        /// Constructor requiring a specified name.
+        /// </summary>
+        /// <param name="name">Name of the index</param>
         public HyperVectorDBIndex(string name)
         {
             this.vectors = new List<double[]>();
@@ -35,6 +48,7 @@ namespace HyperVectorDB
             this.queryCacheCosineSimilarity = new Dictionary<double[], HVDBQueryResult>();
             Name = name;
         }
+
         public async void Save(string path)
         {
             if (fileValid) { return; }

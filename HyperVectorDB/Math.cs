@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace HyperVectorDB {
-    public static class Math {
+    static class Math {
         public static double CosineSimilarity(double[] x, double[] y) {
             double num = 0.0;
             double num2 = 0.0;
