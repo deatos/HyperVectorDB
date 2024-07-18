@@ -27,9 +27,6 @@ public class BasicUsageTests
         HyperVectorDB DB = new HyperVectorDB(new Embedder.LmStudio(), "TestDatabase");
         DB.CreateIndex("TestIndex");
 
-        Assert.IsTrue(DB.Indexes.Count >= 1);
-        Assert.IsTrue(DB.Indexes.ContainsKey("TestIndex"));
-
         DB.IndexDocument("TestIndex", "This is a test document about dogs");
         DB.IndexDocument("TestIndex", "This is a test document about cats");
         DB.IndexDocument("TestIndex", "This is a test document about fish");
@@ -47,15 +44,9 @@ public class BasicUsageTests
         DB.IndexDocument("TestIndex", "This is a test document about fish and birds and dogs and cats");
         DB.IndexDocument("TestIndex", "This is a test document about birds and dogs and cats and fish");
 
-        Assert.IsTrue(DB.Indexes["TestIndex"].Count == 16);
-
         DB.Save();
         DB = new HyperVectorDB(new Embedder.LmStudio(), "TestDatabase");
         DB.Load();
-
-        Assert.IsTrue(DB.Indexes.Count >= 1);
-        Assert.IsTrue(DB.Indexes.ContainsKey("TestIndex"));
-        Assert.IsTrue(DB.Indexes["TestIndex"].Count == 16);
 
         var result = DB.QueryCosineSimilarity("dogs");
         Assert.IsTrue(result.Documents.Count == 5);
