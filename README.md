@@ -3,6 +3,13 @@
 HyperVectorDB is a local vector database built in C# that supports various distance/similarity measures. It is designed to store vectors and associated documents and perform high-performance vector queries. This project supports Cosine Similarity, Jaccard Dissimilarity, as well as Euclidean, Manhattan, Chebyshev, and Canberra distances.
 If you are looking for a python library to do the same thing check out John Dagdelen https://github.com/jdagdelen/hyperDB
 
+## Installation
+
+```
+dotnet add package HyperVectorDB
+```
+
+
 ## Features(To be updated)
 
 - **Query/Response Caching**: Currently only supported for cosine similarity queries. This feature allows the database to cache the results of a query for a given vector, so that the next time the same vector is queried, the results are returned immediately. This feature is useful for applications that require frequent queries on the same vector.
