@@ -40,6 +40,11 @@ namespace HyperVectorDB
         /// <returns></returns>
         public delegate string? DocumentPostprocessor(string line, string? path = null, int? lineNumber = null);
 
+		/// <summary>
+		/// Provides a List of all index names in the current `HyperVectorDB`
+		/// </summary>
+		public List<string> IndexNames { get { return Indexes.Keys.ToList() ?? new List<string>(); } }
+
         /// <summary>
         /// Collection of `HyperVectorDBIndex` organized by names
         /// </summary>

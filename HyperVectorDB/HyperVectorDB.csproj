@@ -14,10 +14,11 @@ Readme </Description>
     <RepositoryUrl>https://github.com/deatos/HyperVectorDB</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>vectordb, ai, database, db</PackageTags>
-    <AssemblyVersion>1.1</AssemblyVersion>
-    <FileVersion>1.1</FileVersion>
+    <AssemblyVersion>1.1.1</AssemblyVersion>
+    <FileVersion>1.1.1</FileVersion>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <Version>1.1.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
