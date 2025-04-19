@@ -28,9 +28,46 @@ Each query function returns the top `k` documents and their corresponding simila
 
 ## Usage
 
-Please note that this project is currently in its development phase. Some functions still need to be tested, and caching for some query types is yet to be implemented.
+Usage is very straight-forward and is illustrated well by the example program in HyperVectorDBExample. A quick summary of the core elements:
 
-Example usage comming soon
+```csharp
+var db = new HyperVectorDB(new Embedder.LmStudio(), "MyDatabase");
+```
+The HyperVectorDB object is the core element of the library and the two things it needs to be provided are an `Embedder` object and a folder name. The folder name is treated as a path, which can be relative or absolute.
+
+```csharp
+db.CreateIndex("MyIndex");
+```
+A `HyperVectorDB` contains one or more named indices. Support for multiple indices allows for seperation of indexed content if needed, or a single index can be used for everything.
+
+```csharp
+db.IndexDocument("This is a test document about dogs");
+```
+
+Indexing of documents can be done in several ways, the most trivial being individual strings. When indexed this way, the whole string is vectorized and the vector stored in the index along with the string.
+
+```csharp
+db.IndexDocumentFile(filepath, CustomPreprocessor, CustomPostprocessor);
+```
+
+Whole text files can also be indexed, in which case the files are split into lines (delimited be newline characters) and each line vectorized and the vectors stored in the index with the full path of the file and the line number where the line was found.
+
+This approach also provides the option to pass custom preprocessor and postprocessor methods that can be used to filter documents to eliminate spurious or uninteresting content. These methods are run for every line of the file and can return a processed string or `null` to indicate the line should be ignored completely. The preprocessor allows for modifying the text prior to vectorization, while the postprocessor allows for customizing how the data is represented in the index.
+
+
+```csharp
+db.Save();
+db.Load();
+```
+
+As documents are indexed the database is written to disk periodically. The `Save()` method allows you to force a write to disk, while the `Load()` method forces a reload from disk, intuitively.
+
+
+```csharp
+var results = db.QueryCosineSimilarity("dogs and cats", 10);
+```
+
+Ultimately, the point of building the database is to query it. There are multiple query methods available and all of them are expecting some string and a number indicating the maximum number of results desired.
 
 ## Contributing
 
