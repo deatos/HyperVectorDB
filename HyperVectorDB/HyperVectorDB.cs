@@ -236,7 +236,8 @@ namespace HyperVectorDB {
 					index.Remove(vector);
 					success = true;
 				} catch (Exception e) {
-					//TODO: handle exception or bubble up?
+					// Log the error and continue with other indexes
+					Console.Error.WriteLine($"Error removing vector from index {index}: {e.Message}");
 				}
 			}
 			return success;
