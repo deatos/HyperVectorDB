@@ -1,3 +1,6 @@
+using NUnit.Framework.Legacy;
+using NUnit.Framework;
+
 namespace HyperVectorDB.Tests;
 
 [TestFixture]
@@ -49,14 +52,14 @@ public class BasicUsageTests
         DB.Load();
 
         var result = DB.QueryCosineSimilarity("dogs");
-        Assert.IsTrue(result.Documents.Count == 5);
+        ClassicAssert.IsTrue(result.Documents.Count == 5);
         result = DB.QueryCosineSimilarity("cats", 10);
-        Assert.IsTrue(result.Documents.Count == 10);
+		ClassicAssert.IsTrue(result.Documents.Count == 10);
         result = DB.QueryCosineSimilarity("fish", 3);
-        Assert.IsTrue(result.Documents.Count == 3);
+		ClassicAssert.IsTrue(result.Documents.Count == 3);
         result = DB.QueryCosineSimilarity("birds", 1);
-        Assert.IsTrue(result.Documents.Count == 1);
+		ClassicAssert.IsTrue(result.Documents.Count == 1);
 
-        Assert.Pass();
+		ClassicAssert.Pass();
     }
 }

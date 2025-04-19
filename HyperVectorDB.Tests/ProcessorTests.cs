@@ -1,3 +1,6 @@
+using NUnit.Framework.Legacy;
+using NUnit.Framework;
+
 namespace HyperVectorDB.Tests;
 
 [TestFixture]
@@ -44,9 +47,9 @@ public class ProcessorTests
         DB.Save();
         var result = DB.QueryCosineSimilarity("dogs", 1);
         var document = result.Documents[0];
-        Assert.IsNotNull(document);
-        Assert.IsTrue(document.DocumentString == document.DocumentString.ToUpperInvariant());
-        Assert.Pass();
+        ClassicAssert.IsNotNull(document);
+        ClassicAssert.IsTrue(document.DocumentString == document.DocumentString.ToUpperInvariant());
+        ClassicAssert.Pass();
     }
 
     [Test]
@@ -57,9 +60,9 @@ public class ProcessorTests
         DB.Save();
         var result = DB.QueryCosineSimilarity("dogs", 1);
         var document = result.Documents[0];
-        Assert.IsNotNull(document);
-        Assert.IsTrue(document.DocumentString == document.DocumentString.ToLowerInvariant());
-        Assert.Pass();
+        ClassicAssert.IsNotNull(document);
+        ClassicAssert.IsTrue(document.DocumentString == document.DocumentString.ToLowerInvariant());
+        ClassicAssert.Pass();
     }
 
     private string? TestPreprocessor(string line, string? path, int? lineNumber)
