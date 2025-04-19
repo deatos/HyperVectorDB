@@ -14,7 +14,7 @@ namespace HyperVectorDBExample
     internal class Program
     {
         // Global database instance
-        public static HyperVectorDB.HyperVectorDB? DB;
+        private static HyperVectorDB.HyperVectorDB? DB;
 
         // State variable for markdown preprocessing
         private static bool skippingBlock = false;
@@ -83,8 +83,22 @@ namespace HyperVectorDBExample
         /// </summary>
         static void Main()
         {
-            InitializeDatabase();
-            RunInteractiveSearch();
+            try
+            {
+                InitializeDatabase();
+                if (DB != null)
+                {
+                    RunInteractiveSearch();
+                }
+                else
+                {
+                    Console.WriteLine("Failed to initialize database. Exiting...");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
         }
 
         /// <summary>
@@ -113,6 +127,8 @@ namespace HyperVectorDBExample
         /// </summary>
         private static void CreateTestDatabase()
         {
+            if (DB == null) throw new InvalidOperationException("Database not initialized");
+
             DB.CreateIndex("TestIndex");
 
             // Create test documents about different animals
@@ -149,6 +165,8 @@ namespace HyperVectorDBExample
         /// </summary>
         private static void IndexDocumentFiles()
         {
+            if (DB == null) throw new InvalidOperationException("Database not initialized");
+
             string[] files = Directory.GetFiles(@".\TestDocuments", "*.*", SearchOption.AllDirectories);
             Console.WriteLine($"Indexing {files.Length} files...");
 
@@ -174,6 +192,8 @@ namespace HyperVectorDBExample
         /// </summary>
         private static void RunInteractiveSearch()
         {
+            if (DB == null) throw new InvalidOperationException("Database not initialized");
+
             while (true)
             {
                 Console.WriteLine("\nEnter a search term (or 'exit' to quit):");
